@@ -28,7 +28,7 @@ function displayCardData(drinks) {
             }</p>
             <div>
               <a href="#" class="btn btn-primary addToCartBtn">Add To Cart</a>
-              <a href="#" class="btn btn-primary">Details</a>
+              <a href="#" class="btn btn-primary cartDetails" data-bs-toggle="modal" data-bs-target="#drinkDetailsModal">Details</a>
             </div>
           </div>
         </div>
@@ -36,11 +36,15 @@ function displayCardData(drinks) {
     cardContainer.appendChild(card);
     const addToCartBtn = card.querySelector(".addToCartBtn");
     addToCartBtn.addEventListener("click", () => addToCart(drink));
+    const cartDetails = card.querySelector(".cartDetails");
+    cartDetails.addEventListener("click", (event) => {
+      event.preventDefault();
+      showDetails(drink);
+    });
   });
 }
 
 function addToCart(drink) {
-  console.log(drink);
   totalCart += 1;
   const cartCountElement = document.getElementById("cartCount");
   if (cartCountElement) {
@@ -55,4 +59,20 @@ function addToCart(drink) {
     <td>${drink.strDrink}</td>
   `;
   cartTableBody.appendChild(row);
+}
+
+function showDetails(drink) {
+  // alert(drink.strInstructions);
+  const modalBody = document.querySelector("#drinkDetailsModal .modal-body");
+  modalBody.innerHTML = `
+   <h5>${drink.strDrink}</h5>
+    <img src="${drink.strDrinkThumb}" class="img-fluid" alt="${drink.strDrink}">
+    <p>${drink.strInstructions}</p>
+`;
+
+  // Show the modal using Bootstrap
+  const drinkDetailsModal = new bootstrap.Modal(
+    document.getElementById("drinkDetailsModal")
+  );
+  drinkDetailsModal.show();
 }
